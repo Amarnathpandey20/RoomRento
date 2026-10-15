@@ -114,7 +114,7 @@ app.get('/api/v1/listings/:id', (req, res) => {
 
 // Create Listing (Owner / Admin)
 app.post('/api/v1/listings', (req, res) => {
-  const { title, price, locality, type, images } = req.body;
+  const { title, price, locality, type, images } = req.body || {};
   if (!title || !price || !locality) {
     return res.status(400).json({ success: false, message: 'Missing required property details' });
   }
@@ -151,13 +151,22 @@ app.delete('/api/v1/listings/:id', (req, res) => {
 
 // 2. Auth API
 app.post('/api/v1/auth/login', (req, res) => {
-  const { email } = req.body;
-  let user = db.users.find(u => u.email.toLowerCase() === (email || '').toLowerCase());
+  const { email } = req.body || {};
+
+  if (!email || typeof email !== 'string' || !email.trim()) {
+    return res.status(400).json({
+      success: false,
+      message: 'Email is required'
+    });
+  }
+
+  const cleanEmail = email.trim();
+  let user = db.users.find(u => (u.email || '').toLowerCase() === cleanEmail.toLowerCase());
   
   if (!user) {
     user = {
-      name: email.split('@')[0],
-      email: email,
+      name: cleanEmail.split('@')[0] || 'User',
+      email: cleanEmail,
       role: 'tenant',
       phone: '+91 98123 45678',
       city: 'Bengaluru',
@@ -262,18 +271,22 @@ app.use((req, res) => {
 });
 
 // Start Server
-app.listen(PORT, () => {
-  console.log(`=======================================================`);
-  console.log(` 🏠 RoomRento Full-Stack Web Application (HTML, CSS, JS & Node.js)`);
-  console.log(` 🚀 Server running at: http://localhost:${PORT}`);
-  console.log(` 🌐 Explore Page:     http://localhost:${PORT}/index.html`);
-  console.log(` 🔍 Room Details:     http://localhost:${PORT}/room-details.html`);
-  console.log(` ⚖️  Compare Matrix:   http://localhost:${PORT}/compare.html`);
-  console.log(` 💖 Saved Wishlist:   http://localhost:${PORT}/saved.html`);
-  console.log(` 💬 Host Enquiries:   http://localhost:${PORT}/enquiries.html`);
-  console.log(` 👤 User Account:     http://localhost:${PORT}/account.html`);
-  console.log(` 🛡️  Admin Dashboard:  http://localhost:${PORT}/admin.html`);
-  console.log(` 🔑 Login Portal:     http://localhost:${PORT}/login.html`);
-  console.log(` ⚡ API Health:       http://localhost:${PORT}/api/v1/health`);
-  console.log(`=======================================================`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`=======================================================`);
+    console.log(` 🏠 RoomRento Full-Stack Web Application (HTML, CSS, JS & Node.js)`);
+    console.log(` 🚀 Server running at: http://localhost:${PORT}`);
+    console.log(` 🌐 Explore Page:     http://localhost:${PORT}/index.html`);
+    console.log(` 🔍 Room Details:     http://localhost:${PORT}/room-details.html`);
+    console.log(` ⚖️  Compare Matrix:   http://localhost:${PORT}/compare.html`);
+    console.log(` 💖 Saved Wishlist:   http://localhost:${PORT}/saved.html`);
+    console.log(` 💬 Host Enquiries:   http://localhost:${PORT}/enquiries.html`);
+    console.log(` 👤 User Account:     http://localhost:${PORT}/account.html`);
+    console.log(` 🛡️  Admin Dashboard:  http://localhost:${PORT}/admin.html`);
+    console.log(` 🔑 Login Portal:     http://localhost:${PORT}/login.html`);
+    console.log(` ⚡ API Health:       http://localhost:${PORT}/api/v1/health`);
+    console.log(`=======================================================`);
+  });
+}
+
+module.exports = app;

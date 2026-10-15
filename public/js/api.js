@@ -86,10 +86,11 @@ window.RoomRentoAPI = {
       phone: '+91 98123 45678',
       avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'
     };
-    if (email.includes('admin')) {
+    const emailStr = String(email || '').toLowerCase();
+    if (emailStr.includes('admin')) {
       user.name = 'Super Admin';
       user.role = 'admin';
-    } else if (email.includes('host') || email.includes('owner')) {
+    } else if (emailStr.includes('host') || emailStr.includes('owner')) {
       user.name = 'Priya Sharma';
       user.role = 'owner';
     }
