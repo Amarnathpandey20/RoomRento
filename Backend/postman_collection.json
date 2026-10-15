@@ -1,0 +1,269 @@
+{
+  "info": {
+    "_postman_id": "a9c7b12d-4567-4e98-9999-roomrentoapi1",
+    "name": "Room Rento REST API (v1)",
+    "description": "Complete collection for Room Finder for Rent backend API: Auth, Listings, Search, Owner Management, Enquiries, Visits, Reviews, and Admin.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "listingId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register Tenant",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Arjun Mehta\",\n  \"email\": \"arjun.mehta@techcorp.in\",\n  \"password\": \"Password123!\",\n  \"phone\": \"+91 98123 45678\",\n  \"role\": \"tenant\",\n  \"city\": \"Bengaluru\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"priya.sharma@host.in\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Get Profile (Me)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/auth/refresh", "host": ["{{baseUrl}}"], "path": ["auth", "refresh"] }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/auth/logout", "host": ["{{baseUrl}}"], "path": ["auth", "logout"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Listings (Public)",
+      "item": [
+        {
+          "name": "Search Listings (All Filters)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/listings?city=Bengaluru&area=Koramangala&minPrice=10000&maxPrice=30000&amenities=wifi,ac,powerBackup&sort=price_asc&page=1&limit=12",
+              "host": ["{{baseUrl}}"],
+              "path": ["listings"],
+              "query": [
+                { "key": "city", "value": "Bengaluru" },
+                { "key": "area", "value": "Koramangala" },
+                { "key": "minPrice", "value": "10000" },
+                { "key": "maxPrice", "value": "30000" },
+                { "key": "amenities", "value": "wifi,ac,powerBackup" },
+                { "key": "sort", "value": "price_asc" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "12" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Featured Listings",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/listings/featured", "host": ["{{baseUrl}}"], "path": ["listings", "featured"] }
+          }
+        },
+        {
+          "name": "Popular Areas",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/listings/popular-areas", "host": ["{{baseUrl}}"], "path": ["listings", "popular-areas"] }
+          }
+        },
+        {
+          "name": "Autocomplete",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/listings/autocomplete?q=Kora", "host": ["{{baseUrl}}"], "path": ["listings", "autocomplete"], "query": [{ "key": "q", "value": "Kora" }] }
+          }
+        },
+        {
+          "name": "Listing Details (by ID or Slug)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/listings/{{listingId}}", "host": ["{{baseUrl}}"], "path": ["listings", "{{listingId}}"] }
+          }
+        },
+        {
+          "name": "Compare Listings",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ids\": [\"{{listingId}}\"]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/listings/compare", "host": ["{{baseUrl}}"], "path": ["listings", "compare"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Owner Operations",
+      "item": [
+        {
+          "name": "Create Listing",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Sunny Studio Koramangala 4th Block\",\n  \"description\": \"Contemporary sunlit studio apartment with private balcony, AC, power backup, and kitchenette.\",\n  \"propertyType\": \"studio\",\n  \"roomType\": \"studio\",\n  \"location\": {\n    \"address\": \"80ft Road, 4th Block\",\n    \"area\": \"Koramangala\",\n    \"city\": \"Bengaluru\",\n    \"geo\": {\n      \"type\": \"Point\",\n      \"coordinates\": [77.6271, 12.9352]\n    }\n  },\n  \"pricing\": {\n    \"monthlyRent\": 17000,\n    \"securityDeposit\": 17000\n  },\n  \"roomFeatures\": {\n    \"ac\": true,\n    \"attachedBathroom\": true,\n    \"balcony\": true\n  },\n  \"buildingFacilities\": {\n    \"wifi\": true,\n    \"powerBackup\": true,\n    \"lift\": true\n  }\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/listings", "host": ["{{baseUrl}}"], "path": ["listings"] }
+          }
+        },
+        {
+          "name": "Autosave Draft Listing",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Draft in progress\",\n  \"propertyType\": \"pg\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/listings/draft", "host": ["{{baseUrl}}"], "path": ["listings", "draft"] }
+          }
+        },
+        {
+          "name": "Get Owner Listings",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/owner/listings", "host": ["{{baseUrl}}"], "path": ["owner", "listings"] }
+          }
+        },
+        {
+          "name": "Get Owner Analytics",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/owner/stats", "host": ["{{baseUrl}}"], "path": ["owner", "stats"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Enquiries & Visits",
+      "item": [
+        {
+          "name": "Send Enquiry",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Is this property available for move in this weekend?\",\n  \"preferredContact\": \"whatsapp\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/listings/{{listingId}}/enquiries", "host": ["{{baseUrl}}"], "path": ["listings", "{{listingId}}", "enquiries"] }
+          }
+        },
+        {
+          "name": "Schedule Visit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"scheduledAt\": \"2026-10-20T11:00:00Z\",\n  \"note\": \"Would like to inspect the room and terrace.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/listings/{{listingId}}/visits", "host": ["{{baseUrl}}"], "path": ["listings", "{{listingId}}", "visits"] }
+          }
+        },
+        {
+          "name": "Get My Visits",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/visits/mine", "host": ["{{baseUrl}}"], "path": ["visits", "mine"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Wishlist",
+      "item": [
+        {
+          "name": "Get Wishlist",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/wishlist", "host": ["{{baseUrl}}"], "path": ["wishlist"] }
+          }
+        },
+        {
+          "name": "Add to Wishlist",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/wishlist/{{listingId}}", "host": ["{{baseUrl}}"], "path": ["wishlist", "{{listingId}}"] }
+          }
+        },
+        {
+          "name": "Remove from Wishlist",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/wishlist/{{listingId}}", "host": ["{{baseUrl}}"], "path": ["wishlist", "{{listingId}}"] }
+          }
+        }
+      ]
+    }
+  ]
+}
