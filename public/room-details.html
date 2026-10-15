@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Room Details • RoomRento</title>
+  <meta name="description" content="View verified room specifications, photos, 360 virtual tour, house rules, and schedule a free visit.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="brand-logo">
+          <div class="brand-icon">
+            <span class="material-symbols-outlined">home_work</span>
+          </div>
+          <span>RoomRento</span>
+        </a>
+      </div>
+
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link">
+          <span class="material-symbols-outlined" style="font-size:18px;">explore</span>
+          Explore
+        </a>
+        <a href="compare.html" class="nav-link">
+          <span class="material-symbols-outlined" style="font-size:18px;">compare_arrows</span>
+          Compare
+          <span class="badge-count compare-count-badge" style="display:none;">0</span>
+        </a>
+        <a href="saved.html" class="nav-link">
+          <span class="material-symbols-outlined" style="font-size:18px;">favorite</span>
+          Saved
+          <span class="badge-count saved-count-badge" style="display:none;">0</span>
+        </a>
+        <a href="enquiries.html" class="nav-link">
+          <span class="material-symbols-outlined" style="font-size:18px;">chat</span>
+          Enquiries
+        </a>
+      </nav>
+
+      <div class="header-actions">
+        <button id="theme-toggle-btn" class="icon-btn" title="Toggle Theme">
+          <span class="material-symbols-outlined">dark_mode</span>
+        </button>
+        <div id="header-user-slot"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Details Content -->
+  <main class="container details-container">
+    <!-- Breadcrumbs -->
+    <div style="display:flex;align-items:center;gap:0.4rem;font-size:0.82rem;color:var(--text-muted);margin-bottom:1.25rem;">
+      <a href="index.html" style="color:var(--primary);font-weight:600;">Home</a>
+      <span>/</span>
+      <span>Bengaluru</span>
+      <span>/</span>
+      <span>Koramangala</span>
+      <span>/</span>
+      <span style="color:var(--text-main);font-weight:600;">Property Details</span>
+    </div>
+
+    <div class="details-grid">
+      <!-- Left Column: Gallery & Details -->
+      <section>
+        <!-- Hero Gallery -->
+        <div class="gallery-main">
+          <img id="gallery-main-img" src="" alt="Property Gallery" loading="eager">
+          <button id="open-virtual-tour-btn" class="btn-primary" style="position:absolute;bottom:14px;right:14px;backdrop-filter:blur(8px);padding:0.45rem 0.95rem;font-size:0.82rem;box-shadow:var(--shadow-md);">
+            <span class="material-symbols-outlined" style="font-size:18px;">360</span>
+            <span>360° Virtual Tour</span>
+          </button>
+          <div style="position:absolute;top:14px;left:14px;display:flex;gap:6px;">
+            <span class="badge-tag verified"><span class="material-symbols-outlined" style="font-size:14px;">verified</span> Verified Host</span>
+            <span class="badge-tag zero-deposit">Zero Deposit Offer</span>
+          </div>
+        </div>
+
+        <!-- Gallery Thumbnails Row -->
+        <div id="gallery-thumbs-container" class="gallery-thumbs" style="margin-bottom:2rem;"></div>
+
+        <!-- Property Title & Location -->
+        <div style="margin-bottom:1.5rem;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;">
+            <div>
+              <h1 id="details-title" style="font-size:1.75rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.35rem;">Urban Luxe Private Studio</h1>
+              <p id="details-location" style="color:var(--text-muted);font-size:0.92rem;display:flex;align-items:center;gap:4px;">
+                <span class="material-symbols-outlined" style="color:var(--primary);font-size:18px;">location_on</span>
+                Loading location...
+              </p>
+            </div>
+            <div style="display:flex;gap:0.5rem;">
+              <button id="details-wishlist-btn" class="heart-btn" title="Save to wishlist" style="width:42px;height:42px;">
+                <span class="material-symbols-outlined" style="font-size:22px;">favorite</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Distance Highlights Strip -->
+        <div style="display:flex;flex-wrap:wrap;gap:0.75rem;padding:0.85rem 1.25rem;background:var(--surface-dim);border-radius:var(--radius-lg);margin-bottom:2rem;">
+          <span style="font-size:0.82rem;display:flex;align-items:center;gap:4px;color:var(--text-main);">
+            <span class="material-symbols-outlined" style="font-size:16px;color:var(--primary);">subway</span>
+            <strong>400m</strong> to Metro Station
+          </span>
+          <span style="font-size:0.82rem;display:flex;align-items:center;gap:4px;color:var(--text-main);">
+            <span class="material-symbols-outlined" style="font-size:16px;color:var(--primary);">business_center</span>
+            <strong>800m</strong> to Tech Park Corridor
+          </span>
+          <span style="font-size:0.82rem;display:flex;align-items:center;gap:4px;color:var(--text-main);">
+            <span class="material-symbols-outlined" style="font-size:16px;color:var(--primary);">local_mall</span>
+            <strong>5 mins</strong> to Forum Mall
+          </span>
+        </div>
+
+        <!-- Specifications Grid -->
+        <h3 style="font-size:1.15rem;font-weight:700;margin-bottom:0.75rem;">Property Specifications</h3>
+        <div id="details-specs-grid" class="amenity-cards-grid" style="margin-bottom:2.5rem;"></div>
+
+        <!-- Categorized Amenities Tabs -->
+        <h3 style="font-size:1.15rem;font-weight:700;margin-bottom:0.5rem;">Amenities & House Rules</h3>
+        <div class="amenity-tabs-nav">
+          <button class="amenity-tab-btn active" data-tab="inRoom">In-Room Amenities</button>
+          <button class="amenity-tab-btn" data-tab="building">Building Facilities</button>
+          <button class="amenity-tab-btn" data-tab="food">Food & Kitchen</button>
+          <button class="amenity-tab-btn" data-tab="rules">House Rules</button>
+        </div>
+        <div id="amenity-tab-content" style="margin-bottom:2.5rem;"></div>
+
+        <!-- Host Profile Card -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow-sm);margin-bottom:2.5rem;">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+            <div style="display:flex;align-items:center;gap:1rem;">
+              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150" style="width:56px;height:56px;border-radius:50%;object-fit:cover;" alt="Priya Sharma">
+              <div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <h4 style="font-size:1.1rem;font-weight:800;">Priya Sharma</h4>
+                  <span class="badge-tag verified" style="font-size:11px;">Verified Superhost</span>
+                </div>
+                <p style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">Replies in 10 mins • 98% Response Rate • Speaks English, Hindi, Kannada</p>
+              </div>
+            </div>
+            <div style="display:flex;gap:0.5rem;">
+              <a href="https://wa.me/919876543210?text=Hi%20Priya,%20I%20am%20interested%20in%20Urban%20Luxe%20Studio" target="_blank" class="btn-secondary" style="color:#059669;padding:0.5rem 1rem;">
+                <span class="material-symbols-outlined" style="font-size:18px;">chat</span>
+                WhatsApp
+              </a>
+              <a href="tel:+919876543210" class="btn-secondary" style="padding:0.5rem 1rem;">
+                <span class="material-symbols-outlined" style="font-size:18px;">call</span>
+                Call Host
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resident Reviews Section -->
+        <section style="margin-bottom:3rem;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+            <h3 style="font-size:1.15rem;font-weight:700;">Resident Ratings & Reviews</h3>
+            <span id="details-rating" class="rating-pill" style="font-size:0.9rem;padding:4px 10px;">
+              <span class="material-symbols-outlined" style="font-size:16px;">star</span>
+              4.9 (128 reviews)
+            </span>
+          </div>
+
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;display:flex;flex-direction:column;gap:1.25rem;">
+            <div style="border-bottom:1px solid var(--border);padding-bottom:1rem;">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                <strong style="font-size:0.9rem;">Meera Nair</strong>
+                <span style="font-size:0.75rem;color:var(--text-muted);">2 weeks ago</span>
+              </div>
+              <p style="font-size:0.85rem;color:var(--text-muted);">"The studio is spotlessly clean and exactly as pictured. 300 Mbps Wi-Fi and power backup worked flawlessly during my work-from-home sprints!"</p>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                <strong style="font-size:0.9rem;">Aditya Verma</strong>
+                <span style="font-size:0.75rem;color:var(--text-muted);">1 month ago</span>
+              </div>
+              <p style="font-size:0.85rem;color:var(--text-muted);">"Priya was extremely helpful during check-in. The rooftop café area is awesome for evening reading."</p>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- Right Column: Sticky Pricing & CTA Card -->
+      <aside>
+        <div style="position:sticky;top:90px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:1.5rem;box-shadow:var(--shadow-md);">
+          <div style="margin-bottom:1.25rem;">
+            <span style="font-size:0.8rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;letter-spacing:0.04em;">Monthly Rent</span>
+            <div style="display:flex;align-items:baseline;gap:4px;margin-top:2px;">
+              <span id="details-rent" style="font-size:2rem;font-weight:800;color:var(--primary);line-height:1;">₹16,500</span>
+              <span style="font-size:0.85rem;color:var(--text-muted);">/ month</span>
+            </div>
+            <p style="font-size:0.75rem;color:var(--success);font-weight:700;margin-top:4px;">✅ Zero Brokerage Guarantee</p>
+          </div>
+
+          <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1rem 0;margin-bottom:1.5rem;display:flex;flex-direction:column;gap:0.6rem;font-size:0.85rem;">
+            <div style="display:flex;justify-content:space-between;">
+              <span style="color:var(--text-muted);">Security Deposit</span>
+              <strong id="details-deposit">₹16,500 (1 Month)</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;">
+              <span style="color:var(--text-muted);">Maintenance</span>
+              <strong id="details-maintenance">Included in rent</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;">
+              <span style="color:var(--text-muted);">Notice Period</span>
+              <strong id="details-notice">1 Month Notice</strong>
+            </div>
+          </div>
+
+          <button id="open-schedule-visit-btn" class="btn-primary" style="width:100%;padding:0.85rem;font-size:0.95rem;margin-bottom:0.75rem;">
+            <span class="material-symbols-outlined">event</span>
+            <span>Schedule Free Visit</span>
+          </button>
+
+          <a href="enquiries.html" class="btn-secondary" style="width:100%;padding:0.85rem;font-size:0.95rem;display:inline-flex;justify-content:center;">
+            <span class="material-symbols-outlined">chat</span>
+            <span>Send Host Enquiry</span>
+          </a>
+
+          <p style="text-align:center;font-size:0.75rem;color:var(--text-muted);margin-top:1rem;">
+            🔒 Free visit • No obligation • Direct host connection
+          </p>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- 360 Virtual Tour Simulator Modal -->
+  <div id="virtual-tour-modal" class="modal-backdrop">
+    <div class="modal-content" style="max-width:720px;">
+      <div class="modal-header">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span class="material-symbols-outlined" style="color:var(--primary);font-size:24px;">360</span>
+          <h3 class="modal-title">360° Virtual Room Tour Simulation</h3>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('virtual-tour-modal')">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="modal-body" style="padding:0;">
+        <div style="position:relative;width:100%;aspect-ratio:16/9;background:#000;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1400" alt="360 view" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.95);">
+          <!-- Hotspot simulation tags -->
+          <div style="position:absolute;top:40%;left:35%;background:rgba(0,104,95,0.9);color:#fff;padding:4px 10px;border-radius:var(--radius-full);font-size:12px;font-weight:700;box-shadow:var(--shadow-md);">
+            📍 Queen Ortho Mattress
+          </div>
+          <div style="position:absolute;top:60%;right:25%;background:rgba(144,77,0,0.9);color:#fff;padding:4px 10px;border-radius:var(--radius-full);font-size:12px;font-weight:700;box-shadow:var(--shadow-md);">
+            📍 Private Balcony Deck
+          </div>
+          <div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);color:#fff;padding:6px 16px;border-radius:var(--radius-full);font-size:12px;">
+            ↔️ Click and drag or use pan controls to look around room
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Schedule Visit Modal -->
+  <div id="schedule-visit-modal" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">Schedule Free Room Visit</h3>
+          <p id="modal-visit-property-title" style="font-size:0.82rem;color:var(--text-muted);"></p>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('schedule-visit-modal')">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="schedule-visit-form">
+          <input type="hidden" id="modal-visit-property-id">
+          
+          <div style="margin-bottom:1.25rem;">
+            <label style="display:block;font-weight:700;font-size:0.88rem;margin-bottom:0.4rem;">Select Date</label>
+            <input type="date" id="visit-date-input" required style="width:100%;padding:0.65rem;border:1px solid var(--border);border-radius:var(--radius-md);outline:none;background:var(--surface-dim);color:var(--text-main);">
+          </div>
+
+          <div style="margin-bottom:1.25rem;">
+            <label style="display:block;font-weight:700;font-size:0.88rem;margin-bottom:0.4rem;">Preferred Time Slot</label>
+            <div style="display:flex;flex-direction:column;gap:0.5rem;">
+              <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;cursor:pointer;">
+                <input type="radio" name="visit-slot" value="Morning (10:00 AM - 1:00 PM)" checked style="accent-color:var(--primary);">
+                Morning (10:00 AM - 1:00 PM)
+              </label>
+              <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;cursor:pointer;">
+                <input type="radio" name="visit-slot" value="Afternoon (1:00 PM - 5:00 PM)" style="accent-color:var(--primary);">
+                Afternoon (1:00 PM - 5:00 PM)
+              </label>
+              <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;cursor:pointer;">
+                <input type="radio" name="visit-slot" value="Evening (5:00 PM - 8:00 PM)" style="accent-color:var(--primary);">
+                Evening (5:00 PM - 8:00 PM)
+              </label>
+            </div>
+          </div>
+
+          <div style="margin-bottom:1.5rem;">
+            <label style="display:block;font-weight:700;font-size:0.88rem;margin-bottom:0.4rem;">Contact Phone Number</label>
+            <input type="tel" id="visit-phone-input" value="+91 98123 45678" required style="width:100%;padding:0.65rem;border:1px solid var(--border);border-radius:var(--radius-md);outline:none;background:var(--surface-dim);color:var(--text-main);">
+          </div>
+
+          <button type="submit" class="btn-primary" style="width:100%;padding:0.75rem;">
+            Confirm Free Visit
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-tab-item">
+      <span class="material-symbols-outlined">explore</span>
+      <span>Explore</span>
+    </a>
+    <a href="compare.html" class="bottom-tab-item">
+      <span class="material-symbols-outlined">compare_arrows</span>
+      <span>Compare</span>
+      <span class="badge-count compare-count-badge" style="display:none;">0</span>
+    </a>
+    <a href="saved.html" class="bottom-tab-item">
+      <span class="material-symbols-outlined">favorite</span>
+      <span>Saved</span>
+      <span class="badge-count saved-count-badge" style="display:none;">0</span>
+    </a>
+    <a href="enquiries.html" class="bottom-tab-item">
+      <span class="material-symbols-outlined">chat</span>
+      <span>Enquiries</span>
+    </a>
+    <a href="account.html" class="bottom-tab-item">
+      <span class="material-symbols-outlined">person</span>
+      <span>Account</span>
+    </a>
+  </nav>
+
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/details.js"></script>
+</body>
+</html>

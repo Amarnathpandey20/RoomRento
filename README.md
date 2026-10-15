@@ -1,95 +1,89 @@
-# RoomRento • Stitch Room Finder Web Application (React Architecture)
+# RoomRento • Room Finder Web Application
 
-A modern, high-performance React web application for finding and comparing premium rooms, PGs, and studio apartments, styled with the **Urban Hearth** design system.
+A modern, high-performance web application for discovering, comparing, and booking verified rooms, luxury PGs, and private studio apartments, built entirely with **pure HTML, Vanilla CSS, Vanilla JavaScript**, and a **Node.js (Express)** backend.
 
 ---
 
-## 🏗️ Architectural Separation of Concerns
+## 🛠️ Technology Stack (No Frameworks)
 
-The codebase is modularized into distinct, single-responsibility layers:
+- **Frontend Core**: Semantic HTML5 & Modern Vanilla JavaScript (ES6+)
+- **Styling**: Handcrafted Vanilla CSS3 with **Urban Hearth** design tokens (CSS variables, dark mode, glassmorphism, responsive grid & flexbox, micro-animations)
+- **Backend**: Node.js & Express REST API (`/api/v1/listings`, `/api/v1/auth`, `/api/v1/visits`, `/api/v1/enquiries`, `/api/v1/admin`)
+- **Persistence**: Built-in in-memory domain store preloaded with verified listings (zero-config instant boot) + optional MongoDB integration.
+
+---
+
+## 🏗️ Project Architecture
 
 ```
-src/
-├── context/                         # Global State Management
-│   └── RoomContext.jsx              # Central context for filters, compare list, wishlist, visits, chats & toast notifications
+room-rento-web-application/
+├── data/                               # Domain fixtures & models
+│   ├── rooms.js                        # Verified property listings & specs
+│   ├── cities.js                       # Top metro coordinates & hotspots
+│   └── users.js                        # Profile & inquiry threads
 │
-├── data/                            # Domain Data & Fixtures
-│   ├── roomsData.js                 # Rich room listing data, specs, amenities & comparison attributes
-│   └── mockUserData.js              # User profile, active enquiries, and scheduled visits
-│
-├── components/                      # Modular UI Components
-│   ├── common/                      # Shared global components
-│   │   ├── Navbar.jsx               # Header with location selector, notifications, profile
-│   │   ├── BottomNav.jsx            # 5-tab navigation with badge counters (Saved, Compare)
-│   │   ├── Toast.jsx                # Toast feedback system
-│   │   └── Badge.jsx                # Reusable status pills
+├── public/                             # Pure HTML, CSS, and Client JS
+│   ├── index.html                      # Explore & Search page
+│   ├── room-details.html               # Room Details, 360 tour, specs & host info
+│   ├── compare.html                    # Smart Comparison Matrix with diff highlight
+│   ├── saved.html                      # Shortlisted wishlist grid
+│   ├── enquiries.html                  # Direct host chat & message threads
+│   ├── account.html                    # User profile & scheduled visits manager
+│   ├── admin.html                      # Admin portal, approvals & analytics
+│   ├── login.html                      # Auth portal with 1-click Demo accounts
 │   │
-│   ├── explore/                     # Explore & Search screen components
-│   │   ├── SearchBar.jsx            # Search input, GPS current location button, filter trigger
-│   │   ├── LocalityChips.jsx        # Quick locality hotspot pills (Koramangala, Indiranagar, etc.)
-│   │   ├── RoomTypeChips.jsx        # Segmented chips (Single Room, Sharing PG, 1RK, Studio)
-│   │   ├── ActiveFilterBar.jsx      # Removable active filter tags + Clear All
-│   │   ├── SortAndViewToggle.jsx    # Sort dropdown & List / Map split toggle
-│   │   ├── PropertyCard.jsx         # Card with image dots, wishlist toggle, compare checkbox & actions
-│   │   ├── MapSplitView.jsx         # Interactive map drawer with pricing pins
-│   │   ├── CompareFloatingTray.jsx  # Floating bottom tray when rooms are selected for comparison
-│   │   └── FilterDrawer.jsx         # Bottom-sheet filter drawer (budget slider, gender, amenities)
+│   ├── css/
+│   │   └── style.css                   # Handcrafted Urban Hearth Vanilla CSS
 │   │
-│   ├── details/                     # Room Details screen components
-│   │   ├── MediaCarousel.jsx        # Image carousel with slide indicator & 3D tour button
-│   │   ├── PropertyHeader.jsx       # Title, location, tags, and verified host badge
-│   │   ├── DistanceHighlights.jsx   # Metro, mall, and tech park distances
-│   │   ├── PricingCard.jsx          # Rent, maintenance, security deposit, and lock-in breakdown
-│   │   ├── RoomSpecsGrid.jsx        # Carpet area, floor, balcony, facing specifications
-│   │   ├── AmenityTabsSection.jsx   # In-Room, Building, Food, and House Rules tabs
-│   │   ├── HostProfileCard.jsx      # Host profile with WhatsApp & Phone direct actions
-│   │   ├── ReviewsSection.jsx       # Rating breakdown and resident reviews
-│   │   ├── ScheduleVisitModal.jsx   # Modal with date & time slots for booking free visits
-│   │   ├── VirtualTourModal.jsx     # 360 Matterport virtual tour simulation modal
-│   │   └── StickyDetailBar.jsx      # Bottom sticky rent summary & "Schedule Visit" CTA
-│   │
-│   ├── comparison/                  # Comparison Matrix screen components
-│   │   ├── ComparisonHeader.jsx     # Header with Highlight Diffs toggle & share link button
-│   │   ├── ComparisonStickyRow.jsx  # Sticky top cards comparing up to 3 rooms side-by-side
-│   │   ├── ComparisonGroup.jsx      # Categorized comparison rows with diff highlight support
-│   │   └── AddRoomModal.jsx         # Modal to pick an available room to compare
-│   │
-│   ├── saved/                       # Wishlist components
-│   │   └── SavedRoomsView.jsx       # Wishlist grid and management
-│   ├── enquiries/                   # Host chat components
-│   │   └── EnquiriesView.jsx        # Direct messaging thread with hosts
-│   └── account/                     # Account components
-│       └── AccountView.jsx          # User profile and scheduled visit tracking
+│   └── js/
+│       ├── data.js                     # Global client data layer
+│       ├── api.js                      # REST API client with offline fallback
+│       ├── app.js                      # Global state, badges, theme & toast system
+│       ├── explore.js                  # Search, filter chips, budget slider & cards
+│       ├── details.js                  # Gallery carousel, 360 view, booking modal
+│       ├── compare.js                  # Side-by-side comparison table & diff toggle
+│       ├── saved.js                    # Wishlist management
+│       ├── enquiries.js                # Simulated chat messaging
+│       ├── account.js                  # Profile & booked visit management
+│       ├── admin.js                    # Admin listings actions & metrics
+│       └── auth.js                     # Authentication handling & demo accounts
 │
-├── pages/                           # Top-Level Page Views
-│   ├── ExplorePage.jsx              # Search & Explore view
-│   ├── RoomDetailsPage.jsx          # Full Room Listing Details view
-│   ├── ComparePage.jsx              # Smart Match Comparison Matrix view
-│   ├── SavedPage.jsx                # Saved Wishlist view
-│   ├── EnquiriesPage.jsx            # Enquiries / Messaging view
-│   └── AccountPage.jsx              # User Account view
-│
-├── styles/                          # Design System Tokens
-│   └── index.css                    # Tailwind CSS directives, safe area padding & custom utilities
-│
-├── App.jsx                          # App router & screen layout coordinator
-├── main.jsx                         # React entry point
-└── tailwind.config.js               # Tailored Urban Hearth color tokens & typography
+├── server.js                           # Node.js + Express Full-Stack Server
+├── package.json                        # Node dependencies & startup scripts
+└── README.md                           # Documentation
 ```
 
 ---
 
-## 🚀 Running the Project
+## 🚀 Running the Application
 
+### 1. Install Dependencies
 ```bash
-# 1. Install dependencies
 npm install
-
-# 2. Start the Vite development server
-npm run dev
-
-# 3. Build for production
-npm run build
 ```
 
-Development server runs on: **http://localhost:5173/**
+### 2. Start the Node.js Server
+```bash
+npm start
+```
+
+### 3. Open in Browser
+- **Explore & Search**: [http://localhost:5000/](http://localhost:5000/)
+- **Room Details**: [http://localhost:5000/room-details.html?id=prop-101](http://localhost:5000/room-details.html?id=prop-101)
+- **Compare Matrix**: [http://localhost:5000/compare.html](http://localhost:5000/compare.html)
+- **Wishlist**: [http://localhost:5000/saved.html](http://localhost:5000/saved.html)
+- **Host Enquiries**: [http://localhost:5000/enquiries.html](http://localhost:5000/enquiries.html)
+- **User Account**: [http://localhost:5000/account.html](http://localhost:5000/account.html)
+- **Admin Dashboard**: [http://localhost:5000/admin.html](http://localhost:5000/admin.html)
+- **Login Portal**: [http://localhost:5000/login.html](http://localhost:5000/login.html)
+- **API Health Check**: [http://localhost:5000/api/v1/health](http://localhost:5000/api/v1/health)
+
+---
+
+## ⚡ 1-Click Demo Accounts
+
+| Role | Email | Password |
+|---|---|---|
+| **Tenant** | `tenant@roomrento.in` | `Password123!` |
+| **Owner / Host** | `priya.sharma@host.in` | `Password123!` |
+| **Super Admin** | `admin@roomrento.in` | `Password123!` |

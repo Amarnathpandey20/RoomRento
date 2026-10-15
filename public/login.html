@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Sign In & Register • RoomRento</title>
+  <meta name="description" content="Sign in to your RoomRento account to manage shortlists, visits, and chat with property hosts.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body style="display:flex;flex-direction:column;min-height:100vh;">
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <span class="material-symbols-outlined">home_work</span>
+        </div>
+        <span>RoomRento</span>
+      </a>
+
+      <button id="theme-toggle-btn" class="icon-btn" title="Toggle Theme">
+        <span class="material-symbols-outlined">dark_mode</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container" style="flex:1;display:flex;align-items:center;justify-content:center;padding:2rem 1rem;">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:2.5rem;width:100%;max-width:440px;box-shadow:var(--shadow-lg);">
+      
+      <div style="text-align:center;margin-bottom:2rem;">
+        <h1 style="font-size:1.75rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.25rem;">Welcome to RoomRento</h1>
+        <p style="font-size:0.85rem;color:var(--text-muted);">Sign in to schedule visits and chat with verified hosts</p>
+      </div>
+
+      <!-- 1-Click Demo Logins -->
+      <div style="margin-bottom:1.5rem;">
+        <span style="font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;display:block;margin-bottom:0.5rem;text-align:center;">
+          ⚡ Quick 1-Click Demo Accounts
+        </span>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;">
+          <button class="btn-secondary" data-demo-role="tenant" style="width:100%;justify-content:flex-start;padding:0.6rem 0.85rem;">
+            <span>👤</span>
+            <div style="text-align:left;line-height:1.2;">
+              <strong style="font-size:0.85rem;display:block;">Tenant Demo (Arjun Mehta)</strong>
+              <span style="font-size:0.72rem;color:var(--text-muted);">tenant@roomrento.in</span>
+            </div>
+          </button>
+          
+          <button class="btn-secondary" data-demo-role="owner" style="width:100%;justify-content:flex-start;padding:0.6rem 0.85rem;">
+            <span>🏡</span>
+            <div style="text-align:left;line-height:1.2;">
+              <strong style="font-size:0.85rem;display:block;">Host / Owner Demo (Priya Sharma)</strong>
+              <span style="font-size:0.72rem;color:var(--text-muted);">priya.sharma@host.in</span>
+            </div>
+          </button>
+
+          <button class="btn-secondary" data-demo-role="admin" style="width:100%;justify-content:flex-start;padding:0.6rem 0.85rem;">
+            <span>🛡️</span>
+            <div style="text-align:left;line-height:1.2;">
+              <strong style="font-size:0.85rem;display:block;">Super Admin Demo</strong>
+              <span style="font-size:0.72rem;color:var(--text-muted);">admin@roomrento.in</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;margin-bottom:1.5rem;color:var(--text-light);font-size:0.75rem;">
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+        <span style="padding:0 0.75rem;text-transform:uppercase;font-weight:600;">Or Email Login</span>
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+      </div>
+
+      <!-- Credentials Form -->
+      <form id="login-form">
+        <div style="margin-bottom:1rem;">
+          <label style="display:block;font-size:0.85rem;font-weight:700;margin-bottom:0.35rem;">Email Address</label>
+          <input type="email" id="login-email" required placeholder="you@domain.com" style="width:100%;padding:0.65rem;border:1px solid var(--border);border-radius:var(--radius-md);outline:none;background:var(--surface-dim);color:var(--text-main);">
+        </div>
+
+        <div style="margin-bottom:1.5rem;">
+          <label style="display:block;font-size:0.85rem;font-weight:700;margin-bottom:0.35rem;">Password</label>
+          <input type="password" id="login-password" required placeholder="••••••••" style="width:100%;padding:0.65rem;border:1px solid var(--border);border-radius:var(--radius-md);outline:none;background:var(--surface-dim);color:var(--text-main);">
+        </div>
+
+        <button type="submit" class="btn-primary" style="width:100%;padding:0.75rem;font-size:0.95rem;">
+          Sign In
+        </button>
+      </form>
+
+      <div style="text-align:center;margin-top:1.5rem;font-size:0.82rem;color:var(--text-muted);">
+        <a href="index.html" style="color:var(--primary);font-weight:600;">← Back to Explore Rooms</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
