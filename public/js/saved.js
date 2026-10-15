@@ -49,7 +49,7 @@ function renderSavedRooms() {
         <div class="card-body">
           <div class="card-header-line">
             <h3 class="property-title">
-              <a href="room-details.html?id=${room.id}">${room.title}</a>
+              <a href="#room-${room.id}" onclick="openRoomDetailsModal('${room.id}'); return false;">${room.title}</a>
             </h3>
             <span class="rating-pill">
               <span class="material-symbols-outlined" style="font-size:13px;font-variation-settings:'FILL' 1;">star</span>
@@ -71,9 +71,9 @@ function renderSavedRooms() {
               <button class="btn-card-visit" onclick="openScheduleVisitModal('${room.id}', '${room.title.replace(/'/g, "\\'")}')">
                 Schedule Visit
               </button>
-              <a href="room-details.html?id=${room.id}" class="icon-btn">
+              <button class="icon-btn" onclick="openRoomDetailsModal('${room.id}')" title="View room details">
                 <span class="material-symbols-outlined">arrow_forward</span>
-              </a>
+              </button>
             </div>
           </div>
         </div>

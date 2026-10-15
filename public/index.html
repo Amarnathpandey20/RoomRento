@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>RoomRento • Find & Compare Verified Rooms, PGs & Studios with Zero Brokerage</title>
-  <meta name="description" content="Discover verified single rooms, luxury sharing PGs, and private studio apartments in Bangalore, Mumbai, Delhi and top tech hubs. Compare side-by-side with zero brokerage.">
+  <title>RoomRento • All-in-One Room Finder, Compare & Booking Web Application</title>
+  <meta name="description" content="Discover, compare, and book verified rooms, luxury sharing PGs, and private studio apartments with zero brokerage.">
   
   <!-- Modern Typography & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,11 +17,11 @@
 </head>
 <body>
 
-  <!-- Top Glassmorphic Navigation -->
+  <!-- Top Navigation Header -->
   <header class="site-header">
     <div class="container header-inner">
       <div class="flex items-center gap-3">
-        <a href="index.html" class="brand-logo">
+        <a href="#explore" class="brand-logo" onclick="navigateToView('explore')">
           <div class="brand-icon">
             <span class="material-symbols-outlined">home_work</span>
           </div>
@@ -36,248 +36,519 @@
         </button>
       </div>
 
-      <!-- Desktop Navigation Links -->
+      <!-- Desktop Navigation Tabs -->
       <nav class="nav-links">
-        <a href="index.html" class="nav-link active">
+        <a href="#explore" class="nav-link active" data-view="explore" onclick="navigateToView('explore')">
           <span class="material-symbols-outlined" style="font-size:18px;">explore</span>
           Explore
         </a>
-        <a href="compare.html" class="nav-link">
+        <a href="#compare" class="nav-link" data-view="compare" onclick="navigateToView('compare')">
           <span class="material-symbols-outlined" style="font-size:18px;">compare_arrows</span>
           Compare
           <span class="badge-count compare-count-badge" style="display:none;">0</span>
         </a>
-        <a href="saved.html" class="nav-link">
+        <a href="#saved" class="nav-link" data-view="saved" onclick="navigateToView('saved')">
           <span class="material-symbols-outlined" style="font-size:18px;">favorite</span>
           Saved
           <span class="badge-count saved-count-badge" style="display:none;">0</span>
         </a>
-        <a href="enquiries.html" class="nav-link">
+        <a href="#enquiries" class="nav-link" data-view="enquiries" onclick="navigateToView('enquiries')">
           <span class="material-symbols-outlined" style="font-size:18px;">chat</span>
           Enquiries
         </a>
-        <a href="admin.html" class="nav-link" style="color:var(--secondary);">
+        <a href="#account" class="nav-link" data-view="account" onclick="navigateToView('account')">
+          <span class="material-symbols-outlined" style="font-size:18px;">person</span>
+          Account
+        </a>
+        <a href="#admin" class="nav-link" data-view="admin" onclick="navigateToView('admin')" style="color:var(--secondary);">
           <span class="material-symbols-outlined" style="font-size:18px;">admin_panel_settings</span>
           Admin
         </a>
       </nav>
 
-      <!-- Actions & Profile -->
+      <!-- Actions, API Status & User -->
       <div class="header-actions">
+        <!-- Live API Health Indicator -->
+        <a href="/api/v1/health" target="_blank" id="api-health-pill" class="api-status-pill" title="View REST API Health Check">
+          <span class="api-pulse"></span>
+          <span>API Online</span>
+        </a>
+
         <button id="theme-toggle-btn" class="icon-btn" title="Toggle Theme">
           <span class="material-symbols-outlined">dark_mode</span>
         </button>
-        <div id="header-user-slot">
-          <!-- Populated by app.js -->
-        </div>
+        <div id="header-user-slot"></div>
       </div>
     </div>
   </header>
 
-  <!-- Hero & Search Strip -->
-  <section class="hero-search-strip">
-    <div class="container">
-      <div class="search-box-card">
-        <div class="search-icon-circle">
-          <span class="material-symbols-outlined" style="font-size:22px;">search</span>
+  <!-- ========================================================================= -->
+  <!-- VIEW 1: EXPLORE & SEARCH                                                  -->
+  <!-- ========================================================================= -->
+  <div id="view-explore" class="app-view active">
+    <!-- Hero & Search Strip -->
+    <section class="hero-search-strip">
+      <div class="container">
+        <div class="search-box-card">
+          <div class="search-icon-circle">
+            <span class="material-symbols-outlined" style="font-size:22px;">search</span>
+          </div>
+          <div class="search-inputs">
+            <input type="text" id="main-search-input" placeholder="Search locality, landmark, tech park or PG..." value="Koramangala, Bengaluru">
+            <span class="search-subtitle">Move-in Immediately • Verified Hosts • Zero Brokerage</span>
+          </div>
+          <button id="gps-button" class="icon-btn" title="Locate via GPS">
+            <span class="material-symbols-outlined" style="font-size:20px;color:var(--primary);">my_location</span>
+          </button>
+          <button id="open-filter-btn" class="btn-primary" style="padding:0.5rem 1rem;">
+            <span class="material-symbols-outlined" style="font-size:18px;">tune</span>
+            <span>Filters</span>
+          </button>
         </div>
-        <div class="search-inputs">
-          <input type="text" id="main-search-input" placeholder="Search locality, landmark, tech park or PG..." value="Koramangala, Bengaluru">
-          <span class="search-subtitle">Move-in Immediately • Verified Hosts • Zero Brokerage</span>
+
+        <!-- Locality Hotspots -->
+        <div class="quick-chips-row">
+          <span style="font-size:0.8rem;font-weight:700;color:var(--text-muted);display:flex;align-items:center;gap:3px;margin-right:4px;">
+            <span class="material-symbols-outlined" style="font-size:16px;color:var(--primary);">near_me</span>
+            Hotspots:
+          </span>
+          <button class="chip locality-chip active" data-locality="Koramangala">Koramangala</button>
+          <button class="chip locality-chip" data-locality="Indiranagar">Indiranagar</button>
+          <button class="chip locality-chip" data-locality="HSR Layout">HSR Layout</button>
+          <button class="chip locality-chip" data-locality="Whitefield">Whitefield</button>
+          <button class="chip locality-chip" data-locality="Bellandur">Bellandur</button>
+          <button class="chip locality-chip" data-locality="All">All Bangalore</button>
         </div>
-        <button id="gps-button" class="icon-btn" title="Locate via GPS">
-          <span class="material-symbols-outlined" style="font-size:20px;color:var(--primary);">my_location</span>
-        </button>
-        <button id="open-filter-btn" class="btn-primary" style="padding:0.5rem 1rem;">
-          <span class="material-symbols-outlined" style="font-size:18px;">tune</span>
-          <span>Filters</span>
-        </button>
-      </div>
 
-      <!-- Quick Locality Hotspot Chips -->
-      <div class="quick-chips-row">
-        <span style="font-size:0.8rem;font-weight:700;color:var(--text-muted);display:flex;align-items:center;gap:3px;margin-right:4px;">
-          <span class="material-symbols-outlined" style="font-size:16px;color:var(--primary);">near_me</span>
-          Hotspots:
-        </span>
-        <button class="chip locality-chip active" data-locality="Koramangala">Koramangala</button>
-        <button class="chip locality-chip" data-locality="Indiranagar">Indiranagar</button>
-        <button class="chip locality-chip" data-locality="HSR Layout">HSR Layout</button>
-        <button class="chip locality-chip" data-locality="Whitefield">Whitefield</button>
-        <button class="chip locality-chip" data-locality="Bellandur">Bellandur</button>
-        <button class="chip locality-chip" data-locality="All">All Bangalore</button>
-      </div>
-
-      <!-- Room Type Segmented Chips -->
-      <div class="category-segmented-row" style="margin-top:0.5rem;">
-        <button class="category-pill active" data-type="all">
-          <span class="material-symbols-outlined" style="font-size:16px;">auto_awesome</span>
-          All Types
-        </button>
-        <button class="category-pill" data-type="Single Room">
-          <span class="material-symbols-outlined" style="font-size:16px;">person</span>
-          Single Room
-        </button>
-        <button class="category-pill" data-type="Sharing PG">
-          <span class="material-symbols-outlined" style="font-size:16px;">group</span>
-          Sharing PG
-        </button>
-        <button class="category-pill" data-type="1RK">
-          <span class="material-symbols-outlined" style="font-size:16px;">door_front</span>
-          1RK Flat
-        </button>
-        <button class="category-pill" data-type="Studio">
-          <span class="material-symbols-outlined" style="font-size:16px;">apartment</span>
-          Private Studio
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- Main Explore Content -->
-  <main class="container">
-    <div class="toolbar-strip">
-      <p id="results-count-label" class="results-count">Loading verified listings...</p>
-      
-      <div class="toolbar-controls">
-        <select id="sort-select" class="sort-select" aria-label="Sort properties">
-          <option value="recommended">Featured / Recommended</option>
-          <option value="price-asc">Price: Low to High</option>
-          <option value="price-desc">Price: High to Low</option>
-          <option value="rating">Top Rated (4.8+)</option>
-        </select>
-
-        <button id="view-toggle-btn" class="view-toggle-btn" title="Toggle Map Split View">
-          <span class="material-symbols-outlined" style="font-size:18px;">map</span>
-          <span>Map View</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Map Split Preview Drawer -->
-    <div id="map-split-container" style="display:none;margin-bottom:1.5rem;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow-sm);background:var(--surface);">
-      <div style="background:linear-gradient(135deg, #134e4a, #065f46);color:#fff;padding:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
-        <div>
-          <span style="font-size:0.75rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--primary-fixed);">Interactive Location Radar</span>
-          <h3 style="font-size:1.25rem;font-weight:800;margin-top:2px;">Koramangala Tech Corridor & Metro Pins</h3>
-          <p style="font-size:0.85rem;opacity:0.85;">All rooms mapped with walking distance to tech parks & cafes.</p>
-        </div>
-        <div style="display:flex;gap:0.5rem;">
-          <span class="chip" style="background:rgba(255,255,255,0.2);color:#fff;border:none;">📍 400m to Sony World</span>
-          <span class="chip" style="background:rgba(255,255,255,0.2);color:#fff;border:none;">🚇 1.2km to Metro</span>
+        <!-- Room Types Segmented -->
+        <div class="category-segmented-row" style="margin-top:0.5rem;">
+          <button class="category-pill active" data-type="all">
+            <span class="material-symbols-outlined" style="font-size:16px;">auto_awesome</span>
+            All Types
+          </button>
+          <button class="category-pill" data-type="Single Room">
+            <span class="material-symbols-outlined" style="font-size:16px;">person</span>
+            Single Room
+          </button>
+          <button class="category-pill" data-type="Sharing PG">
+            <span class="material-symbols-outlined" style="font-size:16px;">group</span>
+            Sharing PG
+          </button>
+          <button class="category-pill" data-type="1RK">
+            <span class="material-symbols-outlined" style="font-size:16px;">door_front</span>
+            1RK Flat
+          </button>
+          <button class="category-pill" data-type="Studio">
+            <span class="material-symbols-outlined" style="font-size:16px;">apartment</span>
+            Private Studio
+          </button>
         </div>
       </div>
-    </div>
-
-    <!-- Properties Grid -->
-    <section id="properties-grid" class="properties-grid">
-      <!-- Populated dynamically by explore.js -->
     </section>
-  </main>
 
-  <!-- Floating Bottom Compare Tray -->
-  <aside id="floating-compare-tray" class="floating-compare-tray">
-    <div class="flex items-center gap-3">
-      <div style="display:flex;flex-direction:column;">
-        <strong style="font-size:0.85rem;">Compare Rooms</strong>
-        <span style="font-size:0.72rem;color:var(--text-muted);"><span id="compare-tray-count">0</span> of 4 selected</span>
+    <!-- Explore Content -->
+    <main class="container">
+      <div class="toolbar-strip">
+        <p id="results-count-label" class="results-count">Loading verified listings...</p>
+        <div class="toolbar-controls">
+          <select id="sort-select" class="sort-select" aria-label="Sort properties">
+            <option value="recommended">Featured / Recommended</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="rating">Top Rated (4.8+)</option>
+          </select>
+          <button id="view-toggle-btn" class="view-toggle-btn" title="Toggle Map Split View">
+            <span class="material-symbols-outlined" style="font-size:18px;">map</span>
+            <span>Map View</span>
+          </button>
+        </div>
       </div>
-      <div id="compare-tray-thumbs" class="compare-tray-thumbs"></div>
-    </div>
-    <a href="compare.html" class="btn-primary" style="padding:0.45rem 1rem;font-size:0.85rem;">
-      <span>Compare Matrix</span>
-      <span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span>
-    </a>
-  </aside>
 
-  <!-- Mobile Bottom Navigation -->
-  <nav class="bottom-nav">
-    <a href="index.html" class="bottom-tab-item active">
-      <span class="material-symbols-outlined">explore</span>
-      <span>Explore</span>
-    </a>
-    <a href="compare.html" class="bottom-tab-item">
-      <span class="material-symbols-outlined">compare_arrows</span>
-      <span>Compare</span>
-      <span class="badge-count compare-count-badge" style="display:none;">0</span>
-    </a>
-    <a href="saved.html" class="bottom-tab-item">
-      <span class="material-symbols-outlined">favorite</span>
-      <span>Saved</span>
-      <span class="badge-count saved-count-badge" style="display:none;">0</span>
-    </a>
-    <a href="enquiries.html" class="bottom-tab-item">
-      <span class="material-symbols-outlined">chat</span>
-      <span>Enquiries</span>
-    </a>
-    <a href="account.html" class="bottom-tab-item">
-      <span class="material-symbols-outlined">person</span>
-      <span>Account</span>
-    </a>
-  </nav>
+      <!-- Map Radar Drawer -->
+      <div id="map-split-container" style="display:none;margin-bottom:1.5rem;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow-sm);background:var(--surface);">
+        <div style="background:linear-gradient(135deg, #134e4a, #065f46);color:#fff;padding:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+          <div>
+            <span style="font-size:0.75rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--primary-fixed);">Interactive Location Radar</span>
+            <h3 style="font-size:1.25rem;font-weight:800;margin-top:2px;">Koramangala Tech Corridor & Metro Pins</h3>
+            <p style="font-size:0.85rem;opacity:0.85;">All rooms mapped with walking distance to tech parks & cafes.</p>
+          </div>
+          <div style="display:flex;gap:0.5rem;">
+            <span class="chip" style="background:rgba(255,255,255,0.2);color:#fff;border:none;">📍 400m to Sony World</span>
+            <span class="chip" style="background:rgba(255,255,255,0.2);color:#fff;border:none;">🚇 1.2km to Metro</span>
+          </div>
+        </div>
+      </div>
 
-  <!-- Filter Drawer Modal -->
-  <div id="filter-drawer-modal" class="modal-backdrop">
-    <div class="modal-content">
+      <!-- Properties Grid -->
+      <section id="properties-grid" class="properties-grid"></section>
+    </main>
+
+    <!-- Floating Bottom Compare Tray -->
+    <aside id="floating-compare-tray" class="floating-compare-tray">
+      <div class="flex items-center gap-3">
+        <div style="display:flex;flex-direction:column;">
+          <strong style="font-size:0.85rem;">Compare Rooms</strong>
+          <span style="font-size:0.72rem;color:var(--text-muted);"><span id="compare-tray-count">0</span> of 4 selected</span>
+        </div>
+        <div id="compare-tray-thumbs" class="compare-tray-thumbs"></div>
+      </div>
+      <button class="btn-primary" style="padding:0.45rem 1rem;font-size:0.85rem;" onclick="navigateToView('compare')">
+        <span>Compare Matrix</span>
+        <span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span>
+      </button>
+    </aside>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 2: SMART COMPARISON MATRIX                                           -->
+  <!-- ========================================================================= -->
+  <div id="view-compare" class="app-view">
+    <main class="container comparison-container">
+      <div class="comparison-header">
+        <div>
+          <h1 style="font-size:1.75rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.25rem;">Smart Match Comparison Matrix</h1>
+          <p style="color:var(--text-muted);font-size:0.9rem;">Analyze rent, deposit, carpet area, Wi-Fi, and house rules side-by-side.</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;">
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.88rem;font-weight:700;cursor:pointer;background:var(--surface);padding:0.45rem 0.85rem;border-radius:var(--radius-full);border:1px solid var(--border);">
+            <input type="checkbox" id="diff-highlight-switch" checked style="accent-color:var(--warning);width:16px;height:16px;">
+            <span>⚡ Highlight Differences</span>
+          </label>
+          <button id="add-compare-room-btn" class="btn-primary" style="padding:0.45rem 1rem;">
+            <span class="material-symbols-outlined" style="font-size:18px;">add</span>
+            <span>Add Property</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="comparison-table-wrapper" class="comparison-table-wrapper"></div>
+
+      <div id="compare-empty-state" style="display:none;text-align:center;padding:5rem 1rem;background:var(--surface);border-radius:var(--radius-xl);border:1px solid var(--border);">
+        <span class="material-symbols-outlined" style="font-size:64px;color:var(--text-light);margin-bottom:1rem;">compare_arrows</span>
+        <h3 style="font-size:1.35rem;font-weight:800;margin-bottom:0.5rem;">No properties in comparison tray</h3>
+        <p style="color:var(--text-muted);max-width:440px;margin:0 auto 1.5rem;font-size:0.9rem;">Select up to 4 rooms on the explore page using the "Compare" checkbox to contrast pricing and specs.</p>
+        <button class="btn-primary" onclick="navigateToView('explore')">Browse Available Rooms</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 3: SAVED WISHLIST                                                    -->
+  <!-- ========================================================================= -->
+  <div id="view-saved" class="app-view">
+    <main class="container" style="padding:2rem 0 5rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
+        <div>
+          <h1 style="font-size:1.75rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.25rem;">Saved Wishlist</h1>
+          <p id="saved-count-label" style="color:var(--text-muted);font-size:0.9rem;">Review shortlisted properties and schedule free visits.</p>
+        </div>
+        <button class="btn-secondary" style="padding:0.45rem 0.95rem;font-size:0.85rem;" onclick="navigateToView('explore')">
+          <span class="material-symbols-outlined" style="font-size:18px;">search</span>
+          Explore More Rooms
+        </button>
+      </div>
+
+      <div id="saved-properties-grid" class="properties-grid"></div>
+
+      <div id="saved-empty-state" style="display:none;text-align:center;padding:5rem 1rem;background:var(--surface);border-radius:var(--radius-xl);border:1px solid var(--border);">
+        <span class="material-symbols-outlined" style="font-size:64px;color:var(--text-light);margin-bottom:1rem;">favorite_border</span>
+        <h3 style="font-size:1.35rem;font-weight:800;margin-bottom:0.5rem;">Your wishlist is empty</h3>
+        <p style="color:var(--text-muted);max-width:440px;margin:0 auto 1.5rem;font-size:0.9rem;">Click the heart icon on any property to save it to your wishlist.</p>
+        <button class="btn-primary" onclick="navigateToView('explore')">Browse Available Rooms</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 4: ENQUIRIES & CHAT                                                  -->
+  <!-- ========================================================================= -->
+  <div id="view-enquiries" class="app-view">
+    <main class="container">
+      <div class="chat-layout">
+        <aside class="chat-sidebar">
+          <div style="padding:1rem;border-bottom:1px solid var(--border);background:var(--surface-dim);">
+            <h2 style="font-size:1.1rem;font-weight:800;">Host Conversations</h2>
+            <p style="font-size:0.75rem;color:var(--text-muted);">Direct message threads with verified property owners</p>
+          </div>
+          <div id="chat-thread-list" class="chat-thread-list"></div>
+        </aside>
+
+        <section class="chat-main">
+          <div id="chat-active-header" style="padding:0.85rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface);"></div>
+          <div id="chat-messages" class="chat-messages"></div>
+          <div style="padding:0.4rem 1rem;background:var(--surface-dim);display:flex;gap:0.5rem;overflow-x:auto;">
+            <button class="chip chat-quick-chip" style="font-size:0.75rem;padding:3px 10px;">Is this room available immediately?</button>
+            <button class="chip chat-quick-chip" style="font-size:0.75rem;padding:3px 10px;">Can I schedule a visit tomorrow at 5 PM?</button>
+            <button class="chip chat-quick-chip" style="font-size:0.75rem;padding:3px 10px;">Are all utilities and Wi-Fi included?</button>
+          </div>
+          <form id="chat-send-form" class="chat-input-bar">
+            <input type="text" id="chat-msg-input" placeholder="Type your message to the host..." autocomplete="off">
+            <button type="submit" class="btn-primary" style="padding:0.65rem 1.25rem;border-radius:var(--radius-full);">
+              <span class="material-symbols-outlined" style="font-size:18px;">send</span>
+              <span>Send</span>
+            </button>
+          </form>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 5: USER ACCOUNT & VISITS                                             -->
+  <!-- ========================================================================= -->
+  <div id="view-account" class="app-view">
+    <main class="container" style="padding:2.5rem 0 5rem;max-width:860px;">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:2rem;box-shadow:var(--shadow-sm);margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;">
+        <div style="display:flex;align-items:center;gap:1.25rem;">
+          <img id="account-user-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" alt="Avatar" style="width:72px;height:72px;border-radius:50%;object-fit:cover;border:3px solid var(--primary-fixed);">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <h1 id="account-user-name" style="font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;">Arjun Mehta</h1>
+              <span class="badge-tag verified" style="font-size:11px;">KYC Verified Tenant</span>
+            </div>
+            <p id="account-user-email" style="font-size:0.85rem;color:var(--text-muted);margin-top:2px;">arjun.mehta@techcorp.in</p>
+            <div style="display:flex;gap:1rem;margin-top:6px;font-size:0.82rem;color:var(--text-muted);">
+              <span>📞 <span id="account-user-phone">+91 98123 45678</span></span>
+              <span>📍 <span id="account-user-city">Bengaluru</span></span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:0.75rem;">
+          <button id="account-logout-btn" class="btn-secondary" style="color:var(--error);">
+            <span class="material-symbols-outlined" style="font-size:18px;">logout</span>
+            Sign Out
+          </button>
+        </div>
+      </div>
+
+      <section style="margin-bottom:2.5rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+          <div>
+            <h2 style="font-size:1.25rem;font-weight:800;">My Scheduled Visits (<span id="account-visits-count">0</span>)</h2>
+            <p style="font-size:0.82rem;color:var(--text-muted);">In-person property visits confirmed with verified hosts</p>
+          </div>
+        </div>
+        <div id="account-visits-list"></div>
+      </section>
+
+      <section style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:1rem;">
+        <div onclick="navigateToView('saved')" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;display:flex;align-items:center;gap:1rem;cursor:pointer;" class="property-card">
+          <div style="width:44px;height:44px;border-radius:var(--radius-md);background:var(--secondary-light);color:var(--secondary);display:flex;align-items:center;justify-content:center;">
+            <span class="material-symbols-outlined">favorite</span>
+          </div>
+          <div>
+            <strong style="font-size:0.95rem;display:block;">Shortlisted Rooms</strong>
+            <span style="font-size:0.78rem;color:var(--text-muted);">View saved properties</span>
+          </div>
+        </div>
+        <div onclick="navigateToView('compare')" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;display:flex;align-items:center;gap:1rem;cursor:pointer;" class="property-card">
+          <div style="width:44px;height:44px;border-radius:var(--radius-md);background:var(--primary-light);color:var(--primary);display:flex;align-items:center;justify-content:center;">
+            <span class="material-symbols-outlined">compare_arrows</span>
+          </div>
+          <div>
+            <strong style="font-size:0.95rem;display:block;">Comparison Matrix</strong>
+            <span style="font-size:0.78rem;color:var(--text-muted);">Side-by-side room analysis</span>
+          </div>
+        </div>
+        <div onclick="navigateToView('admin')" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;display:flex;align-items:center;gap:1rem;cursor:pointer;" class="property-card">
+          <div style="width:44px;height:44px;border-radius:var(--radius-md);background:var(--tertiary-light);color:var(--tertiary);display:flex;align-items:center;justify-content:center;">
+            <span class="material-symbols-outlined">admin_panel_settings</span>
+          </div>
+          <div>
+            <strong style="font-size:0.95rem;display:block;">Host & Admin Portal</strong>
+            <span style="font-size:0.78rem;color:var(--text-muted);">Manage listings & approvals</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 6: ADMIN DASHBOARD                                                   -->
+  <!-- ========================================================================= -->
+  <div id="view-admin" class="app-view">
+    <main class="container" style="padding:2rem 0 5rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
+        <div>
+          <h1 style="font-size:1.75rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.25rem;">Portal Overview & Listings</h1>
+          <p style="color:var(--text-muted);font-size:0.9rem;">Review property verifications, tenant visits, and publish new room listings.</p>
+        </div>
+        <button class="btn-primary" onclick="openModal('admin-add-listing-modal')" style="padding:0.5rem 1rem;">
+          <span class="material-symbols-outlined" style="font-size:18px;">add_circle</span>
+          <span>Post New Listing</span>
+        </button>
+      </div>
+
+      <section style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:1.25rem;margin-bottom:2.5rem;">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;box-shadow:var(--shadow-sm);">
+          <span style="font-size:0.8rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;">Total Published Listings</span>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:0.5rem;">
+            <h2 id="admin-stat-listings" style="font-size:2rem;font-weight:800;color:var(--primary);">0</h2>
+            <div style="width:40px;height:40px;border-radius:var(--radius-md);background:var(--primary-light);color:var(--primary);display:flex;align-items:center;justify-content:center;">
+              <span class="material-symbols-outlined">apartment</span>
+            </div>
+          </div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;box-shadow:var(--shadow-sm);">
+          <span style="font-size:0.8rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;">Active Tenants Registered</span>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:0.5rem;">
+            <h2 id="admin-stat-tenants" style="font-size:2rem;font-weight:800;color:var(--secondary);">1,420</h2>
+            <div style="width:40px;height:40px;border-radius:var(--radius-md);background:var(--secondary-light);color:var(--secondary);display:flex;align-items:center;justify-content:center;">
+              <span class="material-symbols-outlined">group</span>
+            </div>
+          </div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;box-shadow:var(--shadow-sm);">
+          <span style="font-size:0.8rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;">Visits Completed</span>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:0.5rem;">
+            <h2 id="admin-stat-visits" style="font-size:2rem;font-weight:800;color:var(--tertiary);">384</h2>
+            <div style="width:40px;height:40px;border-radius:var(--radius-md);background:var(--tertiary-light);color:var(--tertiary);display:flex;align-items:center;justify-content:center;">
+              <span class="material-symbols-outlined">check_circle</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow-x:auto;box-shadow:var(--shadow-sm);">
+        <div style="padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+          <h3 style="font-size:1.1rem;font-weight:800;">Manage Active Properties</h3>
+        </div>
+        <table style="width:100%;border-collapse:collapse;min-width:640px;">
+          <thead>
+            <tr style="background:var(--surface-dim);font-size:0.82rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;">
+              <th style="padding:0.75rem 1rem;text-align:left;">Property</th>
+              <th style="padding:0.75rem 1rem;text-align:left;">Rent / mo</th>
+              <th style="padding:0.75rem 1rem;text-align:left;">Status</th>
+              <th style="padding:0.75rem 1rem;text-align:left;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-listings-table-body"></tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODALS: UNIFIED OVERLAYS                                                  -->
+  <!-- ========================================================================= -->
+
+  <!-- 1. Room Details Modal -->
+  <div id="room-details-modal" class="modal-backdrop">
+    <div class="modal-content modal-details-wide">
       <div class="modal-header">
-        <h3 class="modal-title">Filter Rooms & PGs</h3>
-        <button class="modal-close-btn" onclick="closeModal('filter-drawer-modal')">
+        <h3 class="modal-title">Property Details & Specifications</h3>
+        <button class="modal-close-btn" onclick="closeModal('room-details-modal')">
           <span class="material-symbols-outlined">close</span>
         </button>
       </div>
-      <div class="modal-body">
-        <!-- Budget Slider -->
-        <div style="margin-bottom:1.5rem;">
-          <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
-            <label style="font-weight:700;font-size:0.9rem;">Maximum Monthly Rent</label>
-            <strong id="budget-slider-val" style="color:var(--primary);font-size:1rem;">₹50,000</strong>
-          </div>
-          <input type="range" id="budget-slider" min="5000" max="50000" step="1000" value="50000" style="width:100%;accent-color:var(--primary);cursor:pointer;">
-          <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);margin-top:4px;">
-            <span>₹5,000</span>
-            <span>₹25,000</span>
-            <span>₹50,000</span>
-          </div>
-        </div>
+      <div class="modal-body" style="padding:1.5rem;">
+        <div class="details-grid">
+          <div>
+            <div class="gallery-main">
+              <img id="modal-gallery-main-img" src="" alt="Main photo">
+              <button id="modal-open-tour-btn" class="btn-primary" style="position:absolute;bottom:14px;right:14px;backdrop-filter:blur(8px);padding:0.45rem 0.95rem;font-size:0.82rem;">
+                <span class="material-symbols-outlined" style="font-size:18px;">360</span>
+                <span>360° Virtual Tour</span>
+              </button>
+            </div>
+            <div id="modal-gallery-thumbs" class="gallery-thumbs" style="margin-bottom:1.5rem;"></div>
 
-        <!-- Gender Preference -->
-        <div style="margin-bottom:1.5rem;">
-          <label style="font-weight:700;font-size:0.9rem;display:block;margin-bottom:0.6rem;">Gender Preference</label>
-          <div style="display:flex;gap:0.75rem;">
-            <label style="display:flex;align-items:center;gap:4px;font-size:0.85rem;cursor:pointer;">
-              <input type="radio" name="filter-gender" value="all" checked style="accent-color:var(--primary);">
-              Any / Co-ed
-            </label>
-            <label style="display:flex;align-items:center;gap:4px;font-size:0.85rem;cursor:pointer;">
-              <input type="radio" name="filter-gender" value="male" style="accent-color:var(--primary);">
-              Gents Only
-            </label>
-            <label style="display:flex;align-items:center;gap:4px;font-size:0.85rem;cursor:pointer;">
-              <input type="radio" name="filter-gender" value="female" style="accent-color:var(--primary);">
-              Ladies Only
-            </label>
-          </div>
-        </div>
+            <div style="margin-bottom:1.5rem;">
+              <h2 id="modal-details-title" style="font-size:1.5rem;font-weight:800;margin-bottom:0.25rem;"></h2>
+              <p id="modal-details-location" style="color:var(--text-muted);font-size:0.9rem;display:flex;align-items:center;gap:4px;"></p>
+            </div>
 
-        <!-- Furnishing -->
-        <div style="margin-bottom:1.5rem;">
-          <label style="font-weight:700;font-size:0.9rem;display:block;margin-bottom:0.6rem;">Furnishing Level</label>
-          <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
-            <span class="chip active">Fully Furnished</span>
-            <span class="chip">Semi Furnished</span>
-            <span class="chip">Unfurnished</span>
-          </div>
-        </div>
+            <h4 style="font-size:1.05rem;font-weight:700;margin-bottom:0.75rem;">Specifications</h4>
+            <div id="modal-details-specs-grid" class="amenity-cards-grid" style="margin-bottom:2rem;"></div>
 
-        <div style="display:flex;gap:0.75rem;margin-top:2rem;">
-          <button id="reset-filter-btn" class="btn-secondary" style="flex:1;">Reset</button>
-          <button id="apply-filter-btn" class="btn-primary" style="flex:1;">Apply Filters</button>
+            <h4 style="font-size:1.05rem;font-weight:700;margin-bottom:0.5rem;">Amenities & Rules</h4>
+            <div class="amenity-tabs-nav">
+              <button class="amenity-tab-btn modal-amenity-tab-btn active" data-tab="inRoom" onclick="switchModalAmenityTab('inRoom')">In-Room</button>
+              <button class="amenity-tab-btn modal-amenity-tab-btn" data-tab="building" onclick="switchModalAmenityTab('building')">Building</button>
+              <button class="amenity-tab-btn modal-amenity-tab-btn" data-tab="food" onclick="switchModalAmenityTab('food')">Food & Kitchen</button>
+              <button class="amenity-tab-btn modal-amenity-tab-btn" data-tab="rules" onclick="switchModalAmenityTab('rules')">House Rules</button>
+            </div>
+            <div id="modal-amenity-tab-content" style="margin-bottom:2rem;"></div>
+
+            <!-- Host Card -->
+            <div style="background:var(--surface-dim);border-radius:var(--radius-lg);padding:1.25rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
+              <div style="display:flex;align-items:center;gap:0.75rem;">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150" style="width:48px;height:48px;border-radius:50%;object-fit:cover;" alt="Host">
+                <div>
+                  <strong>Priya Sharma</strong>
+                  <p style="font-size:0.75rem;color:var(--text-muted);">Verified Superhost • Replies in 10 mins</p>
+                </div>
+              </div>
+              <div style="display:flex;gap:0.5rem;">
+                <a id="modal-host-whatsapp-btn" href="#" target="_blank" class="btn-secondary" style="color:#059669;padding:0.4rem 0.85rem;font-size:0.8rem;">
+                  <span class="material-symbols-outlined" style="font-size:16px;">chat</span>
+                  WhatsApp
+                </a>
+                <a href="tel:+919876543210" class="btn-secondary" style="padding:0.4rem 0.85rem;font-size:0.8rem;">
+                  <span class="material-symbols-outlined" style="font-size:16px;">call</span>
+                  Call Host
+                </a>
+              </div>
+            </div>
+
+            <!-- Reviews -->
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+                <h4 style="font-size:1.05rem;font-weight:700;">Resident Reviews</h4>
+                <span id="modal-details-rating" class="rating-pill"></span>
+              </div>
+              <div style="background:var(--surface-dim);border-radius:var(--radius-md);padding:1rem;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:2px;">
+                  <strong style="font-size:0.85rem;">Meera Nair</strong>
+                  <span style="font-size:0.72rem;color:var(--text-muted);">Verified Resident</span>
+                </div>
+                <p style="font-size:0.82rem;color:var(--text-muted);">"The studio is spotlessly clean and exactly as pictured. 300 Mbps Wi-Fi and power backup worked flawlessly!"</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sticky Modal Sidebar -->
+          <div>
+            <div style="background:var(--surface-dim);border-radius:var(--radius-lg);padding:1.25rem;">
+              <span style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;font-weight:700;">Monthly Rent</span>
+              <div style="display:flex;align-items:baseline;gap:4px;margin-top:2px;">
+                <span id="modal-details-rent" style="font-size:1.85rem;font-weight:800;color:var(--primary);line-height:1;"></span>
+                <span style="font-size:0.8rem;color:var(--text-muted);">/ mo</span>
+              </div>
+              <p style="font-size:0.75rem;color:var(--success);font-weight:700;margin-top:4px;">✅ Zero Brokerage</p>
+
+              <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:0.85rem 0;margin:1rem 0;display:flex;flex-direction:column;gap:0.5rem;font-size:0.82rem;">
+                <div style="display:flex;justify-content:space-between;">
+                  <span style="color:var(--text-muted);">Security Deposit</span>
+                  <strong id="modal-details-deposit"></strong>
+                </div>
+                <div style="display:flex;justify-content:space-between;">
+                  <span style="color:var(--text-muted);">Maintenance</span>
+                  <strong id="modal-details-maintenance"></strong>
+                </div>
+                <div style="display:flex;justify-content:space-between;">
+                  <span style="color:var(--text-muted);">Notice Period</span>
+                  <strong id="modal-details-notice"></strong>
+                </div>
+              </div>
+
+              <button id="modal-open-schedule-visit-btn" class="btn-primary" style="width:100%;padding:0.75rem;font-size:0.9rem;margin-bottom:0.5rem;">
+                <span class="material-symbols-outlined">event</span>
+                Schedule Free Visit
+              </button>
+
+              <button id="modal-details-wishlist-btn" class="btn-secondary" style="width:100%;padding:0.65rem;font-size:0.85rem;justify-content:center;">
+                <span class="material-symbols-outlined">favorite</span>
+                Save to Wishlist
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Schedule Visit Modal -->
+  <!-- 2. Schedule Free Visit Modal -->
   <div id="schedule-visit-modal" class="modal-backdrop">
     <div class="modal-content">
       <div class="modal-header">
@@ -329,7 +600,100 @@
     </div>
   </div>
 
-  <!-- City Selector Modal -->
+  <!-- 3. 360 Virtual Tour Modal -->
+  <div id="virtual-tour-modal" class="modal-backdrop">
+    <div class="modal-content" style="max-width:720px;">
+      <div class="modal-header">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span class="material-symbols-outlined" style="color:var(--primary);font-size:24px;">360</span>
+          <h3 class="modal-title">360° Virtual Room Tour Simulation</h3>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('virtual-tour-modal')">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="modal-body" style="padding:0;">
+        <div style="position:relative;width:100%;aspect-ratio:16/9;background:#000;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1400" alt="360 view" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.95);">
+          <div style="position:absolute;top:40%;left:35%;background:rgba(0,104,95,0.9);color:#fff;padding:4px 10px;border-radius:var(--radius-full);font-size:12px;font-weight:700;">
+            📍 Queen Ortho Mattress
+          </div>
+          <div style="position:absolute;top:60%;right:25%;background:rgba(144,77,0,0.9);color:#fff;padding:4px 10px;border-radius:var(--radius-full);font-size:12px;font-weight:700;">
+            📍 Private Balcony Deck
+          </div>
+          <div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);color:#fff;padding:6px 16px;border-radius:var(--radius-full);font-size:12px;">
+            ↔️ Click and drag or use pan controls to look around room
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Add Room to Compare Modal -->
+  <div id="add-room-modal" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Select Room to Compare</h3>
+        <button class="modal-close-btn" onclick="closeModal('add-room-modal')">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="modal-body" style="padding:0.5rem 0;">
+        <div id="add-room-picker-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Filter Drawer Modal -->
+  <div id="filter-drawer-modal" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Filter Rooms & PGs</h3>
+        <button class="modal-close-btn" onclick="closeModal('filter-drawer-modal')">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom:1.5rem;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+            <label style="font-weight:700;font-size:0.9rem;">Maximum Monthly Rent</label>
+            <strong id="budget-slider-val" style="color:var(--primary);font-size:1rem;">₹50,000</strong>
+          </div>
+          <input type="range" id="budget-slider" min="5000" max="50000" step="1000" value="50000" style="width:100%;accent-color:var(--primary);cursor:pointer;">
+          <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);margin-top:4px;">
+            <span>₹5,000</span>
+            <span>₹25,000</span>
+            <span>₹50,000</span>
+          </div>
+        </div>
+
+        <div style="margin-bottom:1.5rem;">
+          <label style="font-weight:700;font-size:0.9rem;display:block;margin-bottom:0.6rem;">Gender Preference</label>
+          <div style="display:flex;gap:0.75rem;">
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.85rem;cursor:pointer;">
+              <input type="radio" name="filter-gender" value="all" checked style="accent-color:var(--primary);">
+              Any / Co-ed
+            </label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.85rem;cursor:pointer;">
+              <input type="radio" name="filter-gender" value="male" style="accent-color:var(--primary);">
+              Gents Only
+            </label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:0.85rem;cursor:pointer;">
+              <input type="radio" name="filter-gender" value="female" style="accent-color:var(--primary);">
+              Ladies Only
+            </label>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:0.75rem;margin-top:2rem;">
+          <button id="reset-filter-btn" class="btn-secondary" style="flex:1;">Reset</button>
+          <button id="apply-filter-btn" class="btn-primary" style="flex:1;">Apply Filters</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. City Selector Modal -->
   <div id="city-selector-modal" class="modal-backdrop">
     <div class="modal-content">
       <div class="modal-header">
@@ -363,6 +727,139 @@
     </div>
   </div>
 
+  <!-- 7. Authentication / Sign In Modal -->
+  <div id="auth-modal" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Welcome to RoomRento</h3>
+        <button class="modal-close-btn" onclick="closeModal('auth-modal')">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom:1.5rem;">
+          <span style="font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;display:block;margin-bottom:0.5rem;text-align:center;">
+            ⚡ Quick 1-Click Demo Accounts
+          </span>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;">
+            <button class="btn-secondary" data-demo-role="tenant" style="width:100%;justify-content:flex-start;padding:0.6rem 0.85rem;" onclick="loginWithRole('tenant')">
+              <span>👤</span>
+              <div style="text-align:left;line-height:1.2;">
+                <strong style="font-size:0.85rem;display:block;">Tenant Demo (Arjun Mehta)</strong>
+                <span style="font-size:0.72rem;color:var(--text-muted);">tenant@roomrento.in</span>
+              </div>
+            </button>
+            <button class="btn-secondary" data-demo-role="owner" style="width:100%;justify-content:flex-start;padding:0.6rem 0.85rem;" onclick="loginWithRole('owner')">
+              <span>🏡</span>
+              <div style="text-align:left;line-height:1.2;">
+                <strong style="font-size:0.85rem;display:block;">Host / Owner Demo (Priya Sharma)</strong>
+                <span style="font-size:0.72rem;color:var(--text-muted);">priya.sharma@host.in</span>
+              </div>
+            </button>
+            <button class="btn-secondary" data-demo-role="admin" style="width:100%;justify-content:flex-start;padding:0.6rem 0.85rem;" onclick="loginWithRole('admin')">
+              <span>🛡️</span>
+              <div style="text-align:left;line-height:1.2;">
+                <strong style="font-size:0.85rem;display:block;">Super Admin Demo</strong>
+                <span style="font-size:0.72rem;color:var(--text-muted);">admin@roomrento.in</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;margin-bottom:1.25rem;color:var(--text-light);font-size:0.75rem;">
+          <div style="flex:1;height:1px;background:var(--border);"></div>
+          <span style="padding:0 0.75rem;text-transform:uppercase;font-weight:600;">Or Email Login</span>
+          <div style="flex:1;height:1px;background:var(--border);"></div>
+        </div>
+
+        <form id="modal-login-form">
+          <div style="margin-bottom:1rem;">
+            <label style="display:block;font-size:0.85rem;font-weight:700;margin-bottom:0.35rem;">Email Address</label>
+            <input type="email" id="modal-login-email" required placeholder="you@domain.com" style="width:100%;padding:0.65rem;border:1px solid var(--border);border-radius:var(--radius-md);outline:none;background:var(--surface-dim);color:var(--text-main);">
+          </div>
+          <div style="margin-bottom:1.5rem;">
+            <label style="display:block;font-size:0.85rem;font-weight:700;margin-bottom:0.35rem;">Password</label>
+            <input type="password" id="modal-login-password" required placeholder="••••••••" style="width:100%;padding:0.65rem;border:1px solid var(--border);border-radius:var(--radius-md);outline:none;background:var(--surface-dim);color:var(--text-main);">
+          </div>
+          <button type="submit" class="btn-primary" style="width:100%;padding:0.75rem;">Sign In</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Admin Add Listing Modal -->
+  <div id="admin-add-listing-modal" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Post New Room / PG Listing</h3>
+        <button class="modal-close-btn" onclick="closeModal('admin-add-listing-modal')">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="admin-add-listing-form">
+          <div style="margin-bottom:1rem;">
+            <label style="display:block;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem;">Property Title</label>
+            <input type="text" id="new-prop-title" required placeholder="e.g. Zen Garden Private Studio" style="width:100%;padding:0.6rem;border:1px solid var(--border);border-radius:var(--radius-md);outline:none;background:var(--surface-dim);color:var(--text-main);">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem;">
+            <div>
+              <label style="display:block;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem;">Monthly Rent (₹)</label>
+              <input type="number" id="new-prop-price" required placeholder="18000" style="width:100%;padding:0.6rem;border:1px solid var(--border);border-radius:var(--radius-md);outline:none;background:var(--surface-dim);color:var(--text-main);">
+            </div>
+            <div>
+              <label style="display:block;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem;">Locality</label>
+              <input type="text" id="new-prop-locality" required placeholder="Indiranagar" style="width:100%;padding:0.6rem;border:1px solid var(--border);border-radius:var(--radius-md);outline:none;background:var(--surface-dim);color:var(--text-main);">
+            </div>
+          </div>
+          <div style="margin-bottom:1rem;">
+            <label style="display:block;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem;">Room Type</label>
+            <select id="new-prop-type" style="width:100%;padding:0.6rem;border:1px solid var(--border);border-radius:var(--radius-md);outline:none;background:var(--surface-dim);color:var(--text-main);">
+              <option value="Studio">Private Studio</option>
+              <option value="Single Room">Single Room</option>
+              <option value="Sharing PG">Sharing PG</option>
+              <option value="1RK">1RK Flat</option>
+            </select>
+          </div>
+          <div style="margin-bottom:1.5rem;">
+            <label style="display:block;font-weight:700;font-size:0.85rem;margin-bottom:0.3rem;">Image URL</label>
+            <input type="url" id="new-prop-image" placeholder="https://images.unsplash.com/photo-..." style="width:100%;padding:0.6rem;border:1px solid var(--border);border-radius:var(--radius-md);outline:none;background:var(--surface-dim);color:var(--text-main);">
+          </div>
+          <button type="submit" class="btn-primary" style="width:100%;padding:0.75rem;">
+            Publish Room Listing
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="#explore" class="bottom-tab-item active" data-view="explore" onclick="navigateToView('explore')">
+      <span class="material-symbols-outlined">explore</span>
+      <span>Explore</span>
+    </a>
+    <a href="#compare" class="bottom-tab-item" data-view="compare" onclick="navigateToView('compare')">
+      <span class="material-symbols-outlined">compare_arrows</span>
+      <span>Compare</span>
+      <span class="badge-count compare-count-badge" style="display:none;">0</span>
+    </a>
+    <a href="#saved" class="bottom-tab-item" data-view="saved" onclick="navigateToView('saved')">
+      <span class="material-symbols-outlined">favorite</span>
+      <span>Saved</span>
+      <span class="badge-count saved-count-badge" style="display:none;">0</span>
+    </a>
+    <a href="#enquiries" class="bottom-tab-item" data-view="enquiries" onclick="navigateToView('enquiries')">
+      <span class="material-symbols-outlined">chat</span>
+      <span>Enquiries</span>
+    </a>
+    <a href="#account" class="bottom-tab-item" data-view="account" onclick="navigateToView('account')">
+      <span class="material-symbols-outlined">person</span>
+      <span>Account</span>
+    </a>
+  </nav>
+
+  <!-- City selector helper -->
   <script>
     function setCity(city) {
       AppState.currentCity = city;
@@ -373,6 +870,20 @@
       showToast(`Selected city: ${city}`, 'location_city');
       if (typeof fetchAndRenderProperties === 'function') fetchAndRenderProperties();
     }
+
+    async function loginWithRole(role) {
+      let email = 'tenant@roomrento.in';
+      if (role === 'owner') email = 'priya.sharma@host.in';
+      if (role === 'admin') email = 'admin@roomrento.in';
+      showToast(`Logging in as ${role}...`, 'login');
+      const res = await RoomRentoAPI.login(email, 'Password123!');
+      if (res && res.success) {
+        showToast(`Welcome back, ${res.user.name}!`, 'check_circle');
+        closeModal('auth-modal');
+        renderHeaderUser();
+        if (role === 'admin') navigateToView('admin');
+      }
+    }
   </script>
 
   <!-- Pure Vanilla Scripts -->
@@ -380,5 +891,10 @@
   <script src="js/api.js"></script>
   <script src="js/app.js"></script>
   <script src="js/explore.js"></script>
+  <script src="js/compare.js"></script>
+  <script src="js/saved.js"></script>
+  <script src="js/enquiries.js"></script>
+  <script src="js/account.js"></script>
+  <script src="js/admin.js"></script>
 </body>
 </html>

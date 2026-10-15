@@ -72,7 +72,7 @@ function renderComparisonMatrix() {
                 <img src="${(room.images && room.images[0]) || ''}" alt="${room.title}" style="width: 100%; height: 100%; object-fit: cover;">
                 <button onclick="toggleCompare('${room.id}')" title="Remove" style="position: absolute; top: 6px; right: 6px; width: 22px; height: 22px; border-radius: 50%; background: rgba(0,0,0,0.6); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px;">×</button>
               </div>
-              <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.25rem;"><a href="room-details.html?id=${room.id}">${room.title}</a></h4>
+              <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.25rem;"><a href="#room-${room.id}" onclick="openRoomDetailsModal('${room.id}'); return false;">${room.title}</a></h4>
               <p style="font-size: 1.15rem; font-weight: 800; color: var(--primary); margin-bottom: 0.75rem;">₹${(room.price || 0).toLocaleString('en-IN')}<span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 400;">/mo</span></p>
               <button class="btn-primary" style="width: 100%; padding: 0.45rem; font-size: 0.8rem;" onclick="openScheduleVisitModal('${room.id}', '${room.title.replace(/'/g, "\\'")}')">Schedule Visit</button>
             </th>

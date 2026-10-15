@@ -226,46 +226,34 @@ app.get('/api/v1/admin/stats', (req, res) => {
   });
 });
 
-// ─── Frontend Page Routes ─────────────────────────────────────────────────────
+// ─── Frontend Unified Page Routes ──────────────────────────────────────────────
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
-app.get('/explore', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/index.html'));
-});
+app.get('/explore', (req, res) => res.redirect('/#explore'));
+app.get('/compare', (req, res) => res.redirect('/#compare'));
+app.get('/compare.html', (req, res) => res.redirect('/#compare'));
+app.get('/saved', (req, res) => res.redirect('/#saved'));
+app.get('/saved.html', (req, res) => res.redirect('/#saved'));
+app.get('/enquiries', (req, res) => res.redirect('/#enquiries'));
+app.get('/enquiries.html', (req, res) => res.redirect('/#enquiries'));
+app.get('/account', (req, res) => res.redirect('/#account'));
+app.get('/account.html', (req, res) => res.redirect('/#account'));
+app.get('/admin', (req, res) => res.redirect('/#admin'));
+app.get('/admin.html', (req, res) => res.redirect('/#admin'));
+app.get('/login', (req, res) => res.redirect('/#login'));
+app.get('/login.html', (req, res) => res.redirect('/#login'));
 
+app.get('/room/:id', (req, res) => res.redirect(`/#room-${req.params.id}`));
 app.get('/room-details', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/room-details.html'));
+  if (req.query.id) return res.redirect(`/#room-${req.query.id}`);
+  res.redirect('/#explore');
 });
-
-app.get('/room/:id', (req, res) => {
-  res.redirect(`/room-details.html?id=${req.params.id}`);
-});
-
-app.get('/compare', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/compare.html'));
-});
-
-app.get('/saved', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/saved.html'));
-});
-
-app.get('/enquiries', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/enquiries.html'));
-});
-
-app.get('/account', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/account.html'));
-});
-
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/admin.html'));
-});
-
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/login.html'));
+app.get('/room-details.html', (req, res) => {
+  if (req.query.id) return res.redirect(`/#room-${req.query.id}`);
+  res.redirect('/#explore');
 });
 
 // Catch-all fallback to index.html
